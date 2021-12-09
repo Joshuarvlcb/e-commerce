@@ -1,5 +1,7 @@
 require("dotenv").config();
 require("express-async-errors");
+const cors = require("cors");
+
 const express = require("express");
 const app = express();
 const db = require("./db/db");
@@ -8,11 +10,12 @@ const errorHandler = require("./middleware/error-handler");
 const notFound = require("./middleware/not-found");
 const auth = require("./middleware/auth");
 //routes
-app
-  .use([express.urlencoded({ extended: false }), express.json()])
-  .get("/", (req, res) => {
-    res.send("hello");
-  });
+const productRoutes = require("./routes/product");
+const cartRoutes = require("./routes/cart");
+app.use([express.urlencoded({ extended: false }), express.json()]);
+
+app.use("/api/v1", productRoutes);
+app.use("/api/v1", cartRoutes).use(notFound);
 
 const port = process.env.PORT || 3000;
 

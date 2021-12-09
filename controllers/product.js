@@ -1,14 +1,35 @@
-const createProduct = (req, res) => {};
+const Product = require("../models/product");
 
-const filterProducts = (req, res) => {};
+const createProduct = async (req, res) => {
+  const product = await Product.create(req.body);
 
-const deleteProduct = (req, res) => {};
+  res.status(200).json({
+    product,
+  });
+};
 
-const getProduct = (req, res) => {};
+const filterProducts = (req, res) => {
+  //get params
+};
 
-const getAllProducts = (req, res) => {};
+const deleteProduct = (req, res) => {
+  //get id
+};
 
-const updateProduct = (req, res) => {};
+const getProduct = (req, res) => {
+  //get id
+};
+
+const getAllProducts = async (req, res) => {
+  const products = await Product.find({});
+  res.status(200).json({
+    products: [...products],
+  });
+};
+
+const updateProduct = (req, res) => {
+  //get id
+};
 
 module.exports = {
   createProduct,
