@@ -15,7 +15,7 @@ router
   .post(createProduct)
   .get(filterProducts);
 router
-  .route("/product:id")
+  .route("/product/:id")
   .delete(deleteProduct)
   .put(updateProduct)
   .get(getProduct);
