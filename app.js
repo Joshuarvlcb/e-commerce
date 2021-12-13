@@ -12,6 +12,8 @@ const auth = require("./middleware/auth");
 //routes
 const productRoutes = require("./routes/product");
 const cartRoutes = require("./routes/cart");
+app.use(cors());
+
 app.use([express.urlencoded({ extended: false }), express.json()]);
 
 app.use("/api/v1", productRoutes);

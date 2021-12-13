@@ -1,6 +1,6 @@
 const Cart = require("../models/cart");
 const Products = require("../models/product");
-
+const { ObjectId } = require("mongodb");
 //if user doesnt have a cart cart
 const createCart = async (req, res) => {
   //find the product id
@@ -12,21 +12,12 @@ const createCart = async (req, res) => {
   res.status(200).json({ cart: [cart] });
 };
 
-const getCard = async (req, res) => {
+const getCart = async (req, res) => {
   let oldCart = await Cart.findById({ _id: req.params.id });
   res.status(200).json({ oldCart: oldCart });
 };
-//if user has a cart check to see if he is adding or updating quantity
-//add cart
-//remove cart
-//change quanitity
+//!to add products and change the quantity
 const addCart = async (req, res) => {
-  //we get old cart
-  //add cart
-  /*
-  req.body be a object 
-  */
-
   //!laptop 61b279d2ddf38bbb7c7d228f
   let { product, quantity } = req.body;
   if (!product) throw new Error("no product found");
@@ -40,7 +31,7 @@ const addCart = async (req, res) => {
   ) {
     oldCart.products = oldCart.products.map((obj) => {
       if (obj.productId != product) return obj;
-      return { productId: product, quantity: obj.quantity + 1 };
+      return { productId: product, quantity: obj.quantity + quantity };
     });
     console.log(oldCart.products);
     let cart = await Cart.findByIdAndUpdate(
@@ -74,7 +65,27 @@ const addCart = async (req, res) => {
 
   res.status(200).json({ cart: [cart] });
 };
-const removeCart = (req, res) => {};
+//remove products
+const removeCart = async (req, res) => {
+  /*
+user has to pass in the product id in the body 
+find current cart
+*/
+  let { productId } = req.body;
+  if (!productId) throw new error("invalid product id");
+  let oldCart = await Cart.findById({ _id: req.params.id });
+
+  let filterProducts = [...oldCart.products].filter(({ productId: p }) => {
+    return productId != p && p != undefined;
+  });
+  const cart = await Cart.findByIdAndUpdate(req.params.id, {
+    products: filterProducts,
+  });
+
+  res.status(200).json({ cart: cart.products });
+};
+
+// };
 
 // const getCart = async (req, res) => {
 //   //findOneById
@@ -88,11 +99,15 @@ const removeCart = (req, res) => {};
 // };
 
 //when user submits a order
-const deleteCarts = (req, res) => {};
+const deleteCarts = (req, res) => {
+  const cart = Cart.findByIdAndDelete(req.params.id);
+  res.status(200).json({ cart: [] });
+};
 
 module.exports = {
   createCart,
-  getCard,
+  getCart,
   deleteCarts,
   addCart,
+  removeCart,
 };
