@@ -9,12 +9,26 @@ const db = require("./db/db");
 const errorHandler = require("./middleware/error-handler");
 const notFound = require("./middleware/not-found");
 const auth = require("./middleware/auth");
+const fileUpload = require("express-fileupload");
+
 //routes
 const productRoutes = require("./routes/product");
 const cartRoutes = require("./routes/cart");
+
+const cloudinary = require("cloudinary").v2;
+cloudinary.config({
+  cloud_name: process.env.cloud_name,
+  api_key: process.env.api_key,
+  api_secret: process.env.api_secret,
+});
 app.use(cors());
 
-app.use([express.urlencoded({ extended: false }), express.json()]);
+app.use([
+  express.urlencoded({ extended: false }),
+  express.json(),
+  fileUpload({ useTempFiles: true }),
+]);
+// .use(fileUpload({ useTempFiles: true }))
 
 app.use("/api/v1", productRoutes);
 app.use("/api/v1", cartRoutes).use(notFound);

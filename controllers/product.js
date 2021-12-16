@@ -1,4 +1,5 @@
 const Product = require("../models/product");
+const Cart = require("../models/cart");
 
 const createProduct = async (req, res) => {
   const product = await Product.create(req.body);
@@ -14,14 +15,15 @@ const filterProducts = (req, res) => {
 
 const deleteProduct = async (req, res) => {
   //get id
-  const product = await Product.findByIdAndDelete(req.params.id);
-  res.status(200).json({ product: [] });
+  const product = await Cart.findByIdAndUpdate(req.params.id, { products: [] });
+  res.status(200).json({ product: product });
 };
 
 const getProduct = async (req, res) => {
-  //get id
-  const product = await Product.findById(req.params.id);
-  res.status(200).json({ product });
+  // const product = await Cart.findByIdAndUpdate(req.params.id, {
+  //   products: [],
+  // });
+  // res.status(200).json({ product });
 };
 
 const getAllProducts = async (req, res) => {

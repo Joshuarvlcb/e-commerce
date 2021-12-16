@@ -9,6 +9,8 @@ const {
   updateProduct,
 } = require("../controllers/product");
 
+const { uploadProductImage } = require("../controllers/upload");
+
 router
   .route("/product")
   .get(getAllProducts)
@@ -20,4 +22,5 @@ router
   .put(updateProduct)
   .get(getProduct);
 
+router.route("/upload").post(uploadProductImage);
 module.exports = router;

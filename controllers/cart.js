@@ -14,7 +14,7 @@ const createCart = async (req, res) => {
 
 const getCart = async (req, res) => {
   let oldCart = await Cart.findById({ _id: req.params.id });
-  res.status(200).json({ oldCart: oldCart });
+  res.status(200).json({ oldCart: oldCart, msg: "hi" });
 };
 //!to add products and change the quantity
 const addCart = async (req, res) => {
